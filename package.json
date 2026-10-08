@@ -1,0 +1,30 @@
+{
+  "name": "Iterasys-Playwright-Cucumber",
+  "version": "1.0.0",
+  "description": "Projeto de automação web com Playwright",
+  "main": "index.js",
+  "scripts": {
+    "test": "npx playwright test",
+    "test:busca": "cucumber-js --tags \"@busca\"",
+    "test:bug": "cucumber-js --tags \"@bug\"",
+    "test:filtros": "cucumber-js --tags \"@filtros\"",
+    "test:acesso": "cucumber-js --tags \"@acesso\"",
+    "test:bdd": "cucumber-js",
+    "test:bdd:paralelo": "cucumber-js -p paralelo",
+    "test:bdd:headed": "cross-env HEADLESS=false npm run test:bdd",
+    "report": "node generate_report.js"
+  },
+  "keywords": [
+    "playwright",
+    "cucumber"
+  ],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@cucumber/cucumber": "^13.3.0",
+    "@playwright/test": "^1.63.0",
+    "cross-env": "^10.1.0",
+    "cucumber-html-reporter": "^7.2.0"
+  }
+}
