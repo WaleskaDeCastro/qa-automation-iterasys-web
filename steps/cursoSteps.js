@@ -20,12 +20,12 @@ When('o usuário abrir a aula {string}', async function (nomeAula) {
   await this.cursoPage.abrirAula(nomeAula);
 });
 
-Then('a aula {string} e a opção de voltar ao programa devem ser exibidas no curso {string}', async function (nomeAula, nomeCurso) {
+Then('o conteúdo da aula {string} e a opção de retorno devem ser exibidos no curso {string}', async function (nomeAula, nomeCurso) {
   await this.cursoPage.validarAulaEOpcoesDeRetorno(nomeCurso, nomeAula);
 });
 
-When('o usuário voltar ao programa do curso', async function () {
-  await this.cursoPage.voltarAoPrograma();
+When('o usuário clicar no botão de voltar', async function () {
+  await this.cursoPage.voltar();
 });
 
 Then('o programa do curso deve ser exibido novamente na URL {string}', async function (urlEsperada) {

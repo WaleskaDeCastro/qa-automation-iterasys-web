@@ -12,8 +12,8 @@ Funcionalidade: Retornar da aula para o programa do curso
     Quando o usuário abrir o curso "<curso>"
     Então o título do curso "<curso>" deve ser exibido
     Quando o usuário abrir a aula "<aula>"
-    Então a aula "<aula>" e a opção de voltar ao programa devem ser exibidas no curso "<curso>"
-    Quando o usuário voltar ao programa do curso
+    Então o conteúdo da aula "<aula>" e a opção de retorno devem ser exibidos no curso "<curso>"
+    Quando o usuário clicar no botão de voltar
     Então o programa do curso deve ser exibido novamente na URL "<url_esperada>"
 
     Exemplos:

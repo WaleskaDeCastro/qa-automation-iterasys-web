@@ -3,6 +3,7 @@ const { expect } = require('@playwright/test');
 class CursoPage {
   constructor(page) {
     this.page = page;
+    this.linkVoltar = page.locator('a.-default-course-player-back:visible').first();
   }
 
   async acessarPlataforma() {
@@ -63,11 +64,11 @@ class CursoPage {
   async validarAulaEOpcoesDeRetorno(nomeCurso, nomeAula) {
     await expect(this.page.locator('h1')).toContainText(nomeCurso);
     await expect(this.page.getByText(nomeAula, { exact: false }).first()).toBeVisible();
-    await expect(this.page.locator('#wrapper')).toContainText('Voltar ao programa');
+    await expect(this.linkVoltar).toBeVisible();
   }
 
-  async voltarAoPrograma() {
-    await this.page.getByRole('link', { name: 'Voltar ao programa' }).click();
+  async voltar() {
+    await this.linkVoltar.click();
   }
 
   async validarProgramaCursoExibido(urlEsperada) {
