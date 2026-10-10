@@ -1,18 +1,33 @@
 const { When, Then } = require('@cucumber/cucumber');
 
-When('clica em iniciar o curso e seleciona a aula {string}', async function (aula) {
-  // Chama o método atualizado na Page Object passando a turma e a aula correspondente
-  await this.cursoPage.selecionarCursoEular("Formação em Teste e QA com IA - Turma 148", aula);
+When('o usuário carregar mais cursos', async function () {
+  await this.cursoPage.carregarMaisCursos();
 });
 
-When('clica em iniciar o conteúdo para registrar o progresso', async function () {
-  await this.cursoPage.interagirComConteudoVideo();
+Then('o curso {string} deve estar disponível', async function (nomeCurso) {
+  await this.cursoPage.validarCursoDisponivel(nomeCurso);
 });
 
-When('tenta retornar ao curso utilizando o botão de voltar específico da aula', async function () {
-  await this.cursoPage.voltarAoCurso();
+When('o usuário abrir o curso {string}', async function (nomeCurso) {
+  await this.cursoPage.abrirCurso(nomeCurso);
 });
 
-Then('o sistema deve exibir a página do curso mas o teste falha por fluxo de navegação incorreto, registrando o bug', async function () {
-  await this.cursoPage.validarUrlCurso();
+Then('o título do curso {string} deve ser exibido', async function (nomeCurso) {
+  await this.cursoPage.validarTituloCurso(nomeCurso);
+});
+
+When('o usuário abrir a aula {string}', async function (nomeAula) {
+  await this.cursoPage.abrirAula(nomeAula);
+});
+
+Then('a aula {string} e a opção de voltar ao programa devem ser exibidas no curso {string}', async function (nomeAula, nomeCurso) {
+  await this.cursoPage.validarAulaEOpcoesDeRetorno(nomeCurso, nomeAula);
+});
+
+When('o usuário voltar ao programa do curso', async function () {
+  await this.cursoPage.voltarAoPrograma();
+});
+
+Then('o programa do curso deve ser exibido novamente na URL {string}', async function (urlEsperada) {
+  await this.cursoPage.validarProgramaCursoExibido(urlEsperada);
 });

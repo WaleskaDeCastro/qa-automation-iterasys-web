@@ -23,73 +23,56 @@ class CursoPage {
 
   }
 
-  async selecionarCursoEular(nomeCurso, nomeAula) {
-    // 1. Vai para a página geral de cursos/catálogo
-    await this.page.goto('https://iterasys.learnworlds.com/courses');
-    await this.page.waitForLoadState('networkidle');
+  async carregarMaisCursos() {
+    await expect(this.page.locator('#component_1750969932641_344')).toContainText('Carregar mais');
+    await this.page.getByRole('button', { name: 'Carregar mais' }).click();
+  }
 
-    // 2. Localiza e clica no card da turma específica
-    const linkCurso = this.page.locator(`text=${nomeCurso}`).first();
+  async localizarLinkCurso(nomeCurso) {
+    const tituloCurso = this.page.getByRole('heading', { name: nomeCurso, exact: true });
+    await expect(tituloCurso).toBeVisible({ timeout: 15000 });
+
+    const idTitulo = await tituloCurso.getAttribute('id');
+    if (!idTitulo) {
+      throw new Error(`O título do curso "${nomeCurso}" não possui um ID para localizar o card.`);
+    }
+
+    return this.page.locator(`a[aria-labelledby="${idTitulo}"]`).first();
+  }
+
+  async validarCursoDisponivel(nomeCurso) {
+    const linkCurso = await this.localizarLinkCurso(nomeCurso);
+    await expect(linkCurso).toBeVisible({ timeout: 15000 });
+  }
+
+  async abrirCurso(nomeCurso) {
+    const linkCurso = await this.localizarLinkCurso(nomeCurso);
+    await expect(linkCurso).toBeVisible({ timeout: 15000 });
     await linkCurso.scrollIntoViewIfNeeded();
     await linkCurso.click();
-    await this.page.waitForLoadState('networkidle');
-
-    // 3. Localiza e clica na aula específica dentro da página do curso
-    const aulaLocator = this.page.locator(`span[data-testid="course-contents-unit-title"]:has-text("${nomeAula}")`).first();
-    
-    await aulaLocator.waitFor({ state: 'visible', timeout: 15000 });
-    await aulaLocator.scrollIntoViewIfNeeded();
-    await aulaLocator.click();
-    
-    await this.page.waitForLoadState('networkidle');
   }
 
-  async interagirComConteudoVideo() {
-    const iframeLocator = this.page.locator('iframe[title="Conteúdo da unidade"]');
-    await iframeLocator.waitFor({ state: 'visible', timeout: 20000 });
-
-    const frame = iframeLocator.contentFrame();
-    
-    // Tenta clicar no botão de reprodução ou na barra diretamente sem travar se o overlay estiver oculto
-    try {
-      const overlay = frame.locator('.overlayState');
-      if (await overlay.isVisible()) {
-        await overlay.click();
-      }
-    } catch (e) {
-      // Ignora se não houver overlay visível
-    }
-
-    try {
-      const playBtn = frame.getByRole('button', { name: 'Reproduzir' });
-      if (await playBtn.isVisible()) {
-        await playBtn.click();
-      }
-    } catch (e) {
-      // Ignora se o botão não estiver visível
-    }
-
-    // Clica na barra de reprodução (slider) para registrar o progresso de visualização da aula
-    const barraReproducao = frame.getByRole('slider', { name: 'Barra de reprodução' });
-    await barraReproducao.waitFor({ state: 'visible', timeout: 10000 });
-    await barraReproducao.click();
-    
-    // Aguarda alguns segundos para o sistema persistir o progresso no banco da plataforma
-    await this.page.waitForTimeout(3000);
+  async validarTituloCurso(nomeCurso) {
+    await expect(this.page.getByText(nomeCurso, { exact: true }).first()).toBeVisible();
   }
 
-  async voltarAoCurso() {
-    const botaoVoltarPrograma = this.page.locator('a:has-text("Voltar ao programa")');
-    
-    await botaoVoltarPrograma.waitFor({ state: 'visible', timeout: 5000 });
-    await botaoVoltarPrograma.click();
+  async abrirAula(nomeAula) {
+    await this.page.getByText(nomeAula).click();
   }
 
-  async validarUrlCurso() {
-    // Valida se a URL atual corresponde à página do curso esperado
-    const urlAtual = this.page.url();
-    const urlEsperada = 'https://iterasys.learnworlds.com/course/formacao-em-teste-de-software-turma-142';
-    await expect(urlAtual).toBe(urlEsperada);
+  async validarAulaEOpcoesDeRetorno(nomeCurso, nomeAula) {
+    await expect(this.page.locator('h1')).toContainText(nomeCurso);
+    await expect(this.page.getByText(nomeAula, { exact: false }).first()).toBeVisible();
+    await expect(this.page.locator('#wrapper')).toContainText('Voltar ao programa');
+  }
+
+  async voltarAoPrograma() {
+    await this.page.getByRole('link', { name: 'Voltar ao programa' }).click();
+  }
+
+  async validarProgramaCursoExibido(urlEsperada) {
+    await expect(this.page.locator('#el_1748130494432_340')).toContainText('Pro');
+    await expect(this.page).toHaveURL(urlEsperada);
   }
 }
 

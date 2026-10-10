@@ -1,16 +1,22 @@
 # language: pt
-@bug 
-Funcionalidade: Validação de Bug - Ausência de retorno direto da aula para o curso
-  Como usuário da plataforma
-  Quero retornar para a página do curso ao sair da aula
-  Para evitar ser jogado de volta para o catálogo geral
+@bug
+Funcionalidade: Retornar da aula para o programa do curso
+  Como aluno da plataforma
+  Quero voltar da aula para o programa do curso
+  Para continuar navegando pelo conteúdo do curso
 
-  Esquema do Cenário: Validar falha de usabilidade na ausência do botão de retorno para o curso
-    Dado que o usuário esteja na página de cursos 
-    Quando clica em iniciar o curso e seleciona a aula "<aula>"
-    E clica em iniciar o conteúdo para registrar o progresso
-    E tenta retornar ao curso utilizando o botão de voltar específico da aula
-    Então o sistema deve exibir a página do curso mas o teste falha por fluxo de navegação incorreto, registrando o bug
+  Esquema do Cenário: Retornar de uma aula para o programa do curso
+    Dado que o usuário esteja na página de cursos
+    Quando o usuário carregar mais cursos
+    Então o curso "<curso>" deve estar disponível
+    Quando o usuário abrir o curso "<curso>"
+    Então o título do curso "<curso>" deve ser exibido
+    Quando o usuário abrir a aula "<aula>"
+    Então a aula "<aula>" e a opção de voltar ao programa devem ser exibidas no curso "<curso>"
+    Quando o usuário voltar ao programa do curso
+    Então o programa do curso deve ser exibido novamente na URL "<url_esperada>"
+
     Exemplos:
-    | aula         |
-    | Aula Inaugural |
+      | curso                                     | aula           | url_esperada                                                                    |
+      | Formação em Teste de Software - Turma 142 | Apresentação   | https://iterasys.learnworlds.com/course/formacao-em-teste-de-software-turma-142 |
+      | Formação em Teste de Software - Turma 141 | Aula Inaugural | https://iterasys.learnworlds.com/course/formacao-em-teste-de-software-turma-141 |
