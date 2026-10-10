@@ -71,7 +71,7 @@ class CursoPage {
     await this.linkVoltar.click();
   }
 
-  async validarProgramaCursoExibido(urlEsperada) {
+  async validarUrlCursoExibido(urlEsperada) {
     await expect(this.page.locator('#el_1748130494432_340')).toContainText('Pro');
     await expect(this.page).toHaveURL(urlEsperada);
   }

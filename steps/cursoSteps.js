@@ -28,6 +28,6 @@ When('o usuário clicar no botão de voltar', async function () {
   await this.cursoPage.voltar();
 });
 
-Then('o programa do curso deve ser exibido novamente na URL {string}', async function (urlEsperada) {
-  await this.cursoPage.validarProgramaCursoExibido(urlEsperada);
+Then('o curso deve ser exibido novamente na URL {string}', async function (urlEsperada) {
+  await this.cursoPage.validarUrlCursoExibido(urlEsperada);
 });
